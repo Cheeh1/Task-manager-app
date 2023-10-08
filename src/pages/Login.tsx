@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import Task from "../assets/task.jpg";
+import useFormData from "../hooks/useForm";
 
 const Login = () => {
+  const { register, handleSubmit, onSubmit } = useFormData();
+
   return (
     <>
       <section className="bg-white">
@@ -72,7 +75,7 @@ const Login = () => {
               </div>
 
               <form
-                action="#"
+                onSubmit={handleSubmit(onSubmit)}
                 className="mt-8 text-left grid grid-cols-6 gap-6"
               >
                 <div className="col-span-6">
@@ -84,6 +87,7 @@ const Login = () => {
                   </label>
 
                   <input
+                    {...register("email")}
                     type="email"
                     id="Email"
                     name="email"
@@ -100,6 +104,7 @@ const Login = () => {
                   </label>
 
                   <input
+                    {...register("password")}
                     type="password"
                     id="Password"
                     name="password"

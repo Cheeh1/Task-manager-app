@@ -1,7 +1,16 @@
-import { Link } from 'react-router-dom';
-import Task from '../assets/task.jpg'
+import { FC } from "react";
+import { Link } from "react-router-dom";
+import useFormData from "../hooks/useForm";
+import Task from "../assets/task.jpg";
 
-const Register = () => {
+const Register: FC = () => {
+  const {
+    register,
+    handleSubmit,
+    onSubmit,
+    errors,
+  } = useFormData();
+
   return (
     <>
       <section className="bg-white">
@@ -72,7 +81,7 @@ const Register = () => {
               </div>
 
               <form
-                action="#"
+                onSubmit={handleSubmit(onSubmit)}
                 className="mt-8 text-left grid grid-cols-6 gap-6"
               >
                 <div className="col-span-6">
@@ -84,11 +93,17 @@ const Register = () => {
                   </label>
 
                   <input
+                    {...register("nickname")}
                     type="text"
-                    id="FirstName"
-                    name="first_name"
+                    id="nickname"
+                    name="nickname"
                     className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                   />
+                  {errors.nickname && (
+                    <p className="text-[12px] text-red-500 font-medium">
+                      {errors.nickname.message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="col-span-6">
@@ -100,11 +115,17 @@ const Register = () => {
                   </label>
 
                   <input
+                    {...register("email")}
                     type="email"
-                    id="Email"
+                    id="email"
                     name="email"
                     className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                   />
+                  {errors.email && (
+                    <p className="text-[12px] text-red-500 font-medium">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="col-span-6">
@@ -116,11 +137,17 @@ const Register = () => {
                   </label>
 
                   <input
+                    {...register("password")}
                     type="password"
                     id="Password"
                     name="password"
                     className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                   />
+                  {errors.password && (
+                    <p className="text-[12px] text-red-500 font-medium">
+                      {errors.password.message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
