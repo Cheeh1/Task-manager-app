@@ -1,12 +1,95 @@
-import { Link } from "react-router-dom";
+import { FC, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
+import useForm from '../hooks/useForm'
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Task from "../assets/task.jpg";
-import useFormData from "../hooks/useForm";
+import Google from "../assets/google.svg";
 
-const Login = () => {
-  const { register, handleSubmit, onSubmit } = useFormData();
+interface FormData {
+  email: string;
+  password: string;
+}
+
+const Login: FC = () => {
+  const { showPassword, passwordVisibility } = useForm();
+
+  const [formData, setFormData] = useState<FormData>({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  const onFormSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault(); // Prevent the default form submission
+    onSubmit(formData); // Call your onSubmit function with the formData
+    // console.log(formData);
+  };
+
+  const navigate = useNavigate();
+
+  const auth = getAuth();
+  const onSubmit = async (data: { email: string; password: string }) => {
+    try {
+      const { email, password } = data;
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log("User Logged In successfully!");
+
+      toast.success("Logged In Successfully!");
+
+      setTimeout(() => {
+        navigate("/home");
+      }, 2000);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log("Error logging user:", error.message);
+        toast.error("Invalid Login Details");
+      } else {
+        console.log("Unknown error:", error);
+      }
+    }
+  };
+
+  // function for google authentication
+  const provider = new GoogleAuthProvider();
+  const signInWithGoogle = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        // const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+        console.log(user);
+
+        toast.success("Successfully logged in!");
+        setTimeout(() => {
+          navigate("/home");
+        }, 2000);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <>
+      <ToastContainer />
       <section className="bg-white">
         <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
           <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
@@ -75,7 +158,7 @@ const Login = () => {
               </div>
 
               <form
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={onFormSubmit}
                 className="mt-8 text-left grid grid-cols-6 gap-6"
               >
                 <div className="col-span-6">
@@ -87,15 +170,16 @@ const Login = () => {
                   </label>
 
                   <input
-                    {...register("email")}
                     type="email"
-                    id="Email"
+                    id="email"
                     name="email"
+                    defaultValue={formData.email}
+                    onChange={handleChange}
                     className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                   />
                 </div>
 
-                <div className="col-span-6">
+                <div className="relative col-span-6">
                   <label
                     htmlFor="Password"
                     className="block text-sm font-medium text-gray-700"
@@ -104,12 +188,24 @@ const Login = () => {
                   </label>
 
                   <input
-                    {...register("password")}
-                    type="password"
-                    id="Password"
+                    type={showPassword ? "text" : "password"}
+                    id="password"
                     name="password"
+                    defaultValue={formData.password}
+                    onChange={handleChange}
                     className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                   />
+                  <span
+                    className="absolute right-5 top-7 cursor-pointer"
+                    onClick={passwordVisibility}
+                  >
+                    {showPassword ? (
+                      <i className="fa-solid fa-eye"></i>
+                    ) : (
+                      <i className="fa-solid fa-eye-slash"></i>
+                    )}
+                  </span>
+
                   <Link to="/forgotten" className="text-blue-600 text-sm">
                     Forgot password?
                   </Link>
@@ -129,6 +225,23 @@ const Login = () => {
                   </p>
                 </div>
               </form>
+
+              <div className="flex flex-col mt-5 gap-5">
+                <div className="flex gap-5 items-center">
+                  <hr className="border w-40" />
+                  <p className="text-gray-900 font-semibold">OR</p>
+                  <hr className="border w-40" />
+                </div>
+                <div className="flex border-2 rounded-lg p-3 border-blue-500 justify-center gap-5 items-center">
+                  <img className="w-6" src={Google} alt="logo" />
+                  <button
+                    onClick={signInWithGoogle}
+                    className="text-gray-900 font-semibold text-lg"
+                  >
+                    Continue With Google
+                  </button>
+                </div>
+              </div>
             </div>
           </main>
         </div>

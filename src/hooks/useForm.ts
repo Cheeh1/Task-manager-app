@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -19,19 +20,29 @@ const schema = yup.object().shape({
 });
 
 const useFormData = () => {
-    const {
-      register,
-      handleSubmit,
-      formState: { errors },
-    } = useForm<FormData>({ resolver: yupResolver(schema) });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: yupResolver(schema) });
 
-    const onSubmit: SubmitHandler<FormData> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<FormData> = (data) => console.log(data);
 
-    return {
-        register,
-        handleSubmit,
-        onSubmit,
-        errors,
-    }
+  // password visibilty
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const passwordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  return {
+    register,
+    handleSubmit,
+    onSubmit,
+    errors,
+    FormData,
+    showPassword,
+    passwordVisibility
+  };
 }
 export default useFormData;

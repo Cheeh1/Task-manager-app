@@ -1,18 +1,42 @@
-import { FC } from "react";
-import { Link } from "react-router-dom";
-import useFormData from "../hooks/useForm";
+import { Link, useNavigate } from "react-router-dom";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import "../config/firebase";
+import useForm from "../hooks/useForm";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Task from "../assets/task.jpg";
+import { FC } from "react";
 
 const Register: FC = () => {
-  const {
-    register,
-    handleSubmit,
-    onSubmit,
-    errors,
-  } = useFormData();
+  const { register, handleSubmit, errors, showPassword, passwordVisibility } =
+    useForm();
+
+  const navigate = useNavigate();
+  const auth = getAuth();
+
+  const onSubmit = async (data: { email: string; password: string }) => {
+    try {
+      const { email, password } = data;
+      await createUserWithEmailAndPassword(auth, email, password);
+      // console.log("User registered successfully!");
+      toast.success("User registered successfully");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log("Error registering user:", error.message);
+        toast.error("Email already in use");
+      } else {
+        console.log("Unknown error:", error);
+      }
+    }
+  };
 
   return (
     <>
+      <ToastContainer />
       <section className="bg-white">
         <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
           <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
@@ -97,7 +121,7 @@ const Register: FC = () => {
                     type="text"
                     id="nickname"
                     name="nickname"
-                    className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                    className="mt-1 font-medium w-full rounded-md border-gray-200 bg-white text-md text-gray-700 shadow-sm"
                   />
                   {errors.nickname && (
                     <p className="text-[12px] text-red-500 font-medium">
@@ -119,7 +143,7 @@ const Register: FC = () => {
                     type="email"
                     id="email"
                     name="email"
-                    className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                    className="mt-1 font-medium w-full rounded-md border-gray-200 bg-white text-md text-gray-700 shadow-sm"
                   />
                   {errors.email && (
                     <p className="text-[12px] text-red-500 font-medium">
@@ -128,7 +152,7 @@ const Register: FC = () => {
                   )}
                 </div>
 
-                <div className="col-span-6">
+                <div className="relative col-span-6">
                   <label
                     htmlFor="Password"
                     className="block text-sm font-medium text-gray-700"
@@ -138,11 +162,21 @@ const Register: FC = () => {
 
                   <input
                     {...register("password")}
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     id="Password"
                     name="password"
-                    className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                    className="mt-1 font-medium w-full rounded-md border-gray-200 bg-white text-md text-gray-700 shadow-sm"
                   />
+                  <span
+                    className="absolute right-5 top-7 cursor-pointer"
+                    onClick={passwordVisibility}
+                  >
+                    {showPassword ? (
+                      <i className="fa-solid fa-eye"></i>
+                    ) : (
+                      <i className="fa-solid fa-eye-slash"></i>
+                    )}
+                  </span>
                   {errors.password && (
                     <p className="text-[12px] text-red-500 font-medium">
                       {errors.password.message}
