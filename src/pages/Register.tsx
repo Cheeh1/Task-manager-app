@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import "../config/firebase";
-import useForm from "../hooks/useForm";
+import {useFormData} from "../hooks/useForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Task from "../assets/task.jpg";
@@ -9,7 +9,7 @@ import { FC } from "react";
 
 const Register: FC = () => {
   const { register, handleSubmit, errors, showPassword, passwordVisibility } =
-    useForm();
+    useFormData();
 
   const navigate = useNavigate();
   const auth = getAuth();

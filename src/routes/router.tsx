@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Forgotten from "../pages/Forgotten";
@@ -13,7 +14,8 @@ const RouterLink = () => {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgotten" element={<Forgotten />} />
-        <Route path="/home" element={<Protected><Home /></Protected>} />
+        {/* <Route path="/home" element={<Protected><Home /></Protected>} /> */}
+        <Route path="/home" element={<Home />} />
         <Route path="*" element={<Errorpage />} />
       </Routes>
     </Router>

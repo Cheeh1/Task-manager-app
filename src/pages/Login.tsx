@@ -6,7 +6,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
-import useForm from '../hooks/useForm'
+import {useFormData} from '../hooks/useForm'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Task from "../assets/task.jpg";
@@ -18,7 +18,7 @@ interface FormData {
 }
 
 const Login: FC = () => {
-  const { showPassword, passwordVisibility } = useForm();
+  const { showPassword, passwordVisibility } = useFormData();
 
   const [formData, setFormData] = useState<FormData>({
     email: "",
