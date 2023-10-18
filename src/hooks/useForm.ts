@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
+import { addTask } from "../store";
+import { useDispatch } from "react-redux";
 
 // Register Component
 interface FormData {
@@ -13,12 +14,21 @@ interface FormData {
 
 // yup schema
 const schema = yup.object().shape({
-  nickname: yup.string().required("Nickname is required").min(4, "Field must be at least 4 characters"),
+  nickname: yup
+    .string()
+    .required("Nickname is required")
+    .min(4, "Field must be at least 4 characters"),
   email: yup
     .string()
     .required("Email is required")
     .matches(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i, "Invalid Email format"),
-  password: yup.string().required("Password is required").matches(/^(?=.*[0-9]).{6,}$/, 'Password must be at least 6 characters and contain at least one number'),
+  password: yup
+    .string()
+    .required("Password is required")
+    .matches(
+      /^(?=.*[0-9]).{6,}$/,
+      "Password must be at least 6 characters and contain at least one number"
+    ),
 });
 
 export const useFormData = () => {
@@ -44,10 +54,9 @@ export const useFormData = () => {
     errors,
     FormData,
     showPassword,
-    passwordVisibility
+    passwordVisibility,
   };
-}
-
+};
 
 // Form Input validation and errors for task in Home component.
 interface TaskData {
@@ -61,23 +70,33 @@ const taskSchema = yup.object().shape({
   title: yup.string().required("Title is required"),
   description: yup.string().required("Description is required"),
   date: yup.string().required("Pick a date"),
-  time: yup.string().required("Pick a time")
-})
+  time: yup.string().required("Pick a time"),
+});
 
 export const useTaskData = () => {
-
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm<TaskData>({ resolver: yupResolver(taskSchema)});
+  } = useForm<TaskData>({ resolver: yupResolver(taskSchema) });
 
-  const onSubmit: SubmitHandler<TaskData> = (data) => console.log(data);
+  const dispatch = useDispatch();
+  const onSubmit: SubmitHandler<TaskData> = (data) => {
+    console.log(data);
+    const newTask = {
+      id: Date.now(),
+      ...data,
+      completed: false,
+    };
+    dispatch(addTask(newTask));
+    reset();
+  };
 
   return {
     register,
     handleSubmit,
     onSubmit,
-    errors
-  }
-}
+    errors,
+  };
+};

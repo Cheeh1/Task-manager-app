@@ -7,10 +7,12 @@ import "react-toastify/dist/ReactToastify.css";
 import Modal from "../components/Modal";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import TaskList from "../components/TaskList";
 
 const Home = () => {
-  const { register, handleSubmit, onSubmit } = useTaskData();
+  const { register, handleSubmit, onSubmit, errors } = useTaskData();
   const [modal, setModal] = useState<boolean>(false);
+
   const navigate = useNavigate();
 
   const auth = getAuth();
@@ -63,43 +65,85 @@ const Home = () => {
     <>
       <ToastContainer />
       <Header handleDelete={handleDelete} handleLogout={handleLogout} />
-      <main>
-        <section className="flex flex-col items-center py-5">
+      <main className="flex justify-evenly">
+        <section className="flex flex-col items-center py-8">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-3"
           >
             <div className="flex flex-col gap-2">
-              <label htmlFor="title">Task Title</label>
+              <label htmlFor="title" className="font-[700] text-xl">
+                Task Title
+              </label>
               <input
                 {...register("title")}
                 type="text"
                 name="title"
                 id="title"
+                className="w-72 rounded-md shadow-md border focus:border-blue-500"
               />
+              {errors.title && (
+                <p className="text-[12px] text-red-500 font-medium">
+                  {errors.title.message}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-2">
-              <label htmlFor="">Description</label>
-              <input
-                {...register("description")}
-                type="text"
-                name="description"
+              <label htmlFor="description" className="font-[700] text-xl">
+                Description
+              </label>
+              <textarea
+                // name="description"
                 id="description"
+                {...register("description")}
+                className="rounded-md shadow-md border focus:border-blue-500"
+              ></textarea>
+              {errors.description && (
+                <p className="text-[12px] text-red-500 font-medium">
+                  {errors.description.message}
+                </p>
+              )}
+            </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="date" className="font-[700] text-xl">
+                Date
+              </label>
+              <input
+                {...register("date")}
+                type="date"
+                name="date"
+                id="date"
+                className="rounded-md shadow-md border focus:border-blue-500"
               />
+              {errors.date && (
+                <p className="text-[12px] text-red-500 font-medium">
+                  {errors.date.message}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-2">
-              <label htmlFor="">Date</label>
-              <input {...register("date")} type="date" name="date" id="date" />
+              <label htmlFor="time" className="font-[700] text-xl">
+                Time
+              </label>
+              <input
+                type="time"
+                {...register("time")}
+                name="time"
+                id="time"
+                className="rounded-md shadow-md border focus:border-blue-500"
+              />
+              {errors.time && (
+                <p className="text-[12px] text-red-500 font-medium">
+                  {errors.time.message}
+                </p>
+              )}
             </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="">Time</label>
-              <input type="time" {...register("time")} name="time" id="time" />
-            </div>
-            <button className="bg-blue-500 font-medium text-gray-100 p-3 rounded-lg">
+            <button className="bg-blue-500 font-medium text-lg text-gray-100 p-3 rounded-lg">
               Add Task
             </button>
           </form>
         </section>
+        <TaskList />
       </main>
       <Footer />
 
