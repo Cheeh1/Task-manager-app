@@ -65,7 +65,7 @@ const Home = () => {
     <>
       <ToastContainer />
       <Header handleDelete={handleDelete} handleLogout={handleLogout} />
-      <main className="flex justify-evenly">
+      <main className="flex justify-evenly flex-col md:flex-row lg:flex-row">
         <section className="flex flex-col items-center py-8">
           <form
             onSubmit={handleSubmit(onSubmit)}

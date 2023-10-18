@@ -19,7 +19,7 @@ const TaskList = () => {
       <section className="flex flex-col gap-3 py-8">
         {tasks.map((task) => (
           <div
-            className={`relative flex flex-col gap-2 items-start text-white py-5 px-5 rounded-xl ${
+            className={`relative flex flex-col gap-2 items-start text-white py-5 px-5 mx-5 rounded-xl ${
               task.completed ? "bg-gray-500" : "bg-gray-900"
             }`}
             key={task.id}
@@ -27,7 +27,7 @@ const TaskList = () => {
             <h2
               className={`font-bold text-2xl ${
                 task.completed ? "line-through" : ""
-              } w-96`}
+              } md:w-96 lg:w-96`}
             >
               {task.title}
             </h2>
@@ -37,13 +37,13 @@ const TaskList = () => {
             >
               <i className="fa-solid fa-trash"></i>
             </div>
-            <p className={`w-96 ${task.completed ? "line-through" : ""}`}>
+            <p className={`lg:w-96 md:w-96 ${task.completed ? "line-through" : ""}`}>
               {task.description}
             </p>
-            <div className="flex gap-20">
+            <div className="flex md:gap-20 lg:gap-20">
               <div className="flex flex-col">
                 <p className="font-medium">Date</p>
-                <p className={`${task.completed ? "line-through" : ""}`}>
+                <p className={`${task.completed ? "line-through" : ""} w-40`}>
                   {new Date(task.date).toUTCString().split("00:00:00")[0]}
                 </p>
               </div>
