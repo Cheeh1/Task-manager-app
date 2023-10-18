@@ -16,8 +16,7 @@ const RouterLink = () => {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgotten" element={<Forgotten />} />
-        {/* <Route path="/home" element={<Protected><Home /></Protected>} /> */}
-        <Route path="/home" element={<Home />} />
+        <Route path="/home" element={<Protected><Home /></Protected>} />
         <Route path="*" element={<Errorpage />} />
       </Routes>
     </Router>
