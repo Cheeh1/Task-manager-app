@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { ToastContainer } from "react-toastify";
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
 import errorImg from "../assets/error.png";
@@ -11,6 +12,7 @@ interface Props {
 const Modal: FC<Props> = ({ visible, onClose, onConfirm }) => {
   return (
     <>
+    <ToastContainer/>
       <Rodal visible={visible} onClose={onClose} animation="rotate" width={400}>
         <div className="flex flex-col gap-10">
           <div className="flex gap-5 items-start">

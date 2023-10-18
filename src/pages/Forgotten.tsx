@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 interface FormData {
@@ -48,7 +48,6 @@ const Forgotten = () => {
   };
   return (
     <>
-      <ToastContainer />
       <section className="flex flex-col items-center my-56 gap-4">
         <h1 className="text-3xl font-medium">Enter your email</h1>
         <input

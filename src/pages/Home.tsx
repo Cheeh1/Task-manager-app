@@ -2,8 +2,7 @@ import { getAuth, signOut, deleteUser } from "firebase/auth";
 import { useTaskData } from "../hooks/useForm";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import Modal from "../components/Modal";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -63,7 +62,6 @@ const Home = () => {
   };
   return (
     <>
-      <ToastContainer />
       <Header handleDelete={handleDelete} handleLogout={handleLogout} />
       <main className="flex justify-evenly flex-col md:flex-row lg:flex-row">
         <section className="flex flex-col items-center py-8">
